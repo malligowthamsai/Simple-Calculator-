@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern JS Calculator</title>
+    <style>
+        /* --- CSS STYLES --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #1e1e2f, #25293e);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .calculator {
+            background-color: #1a1a1a;
+            padding: 25px;
+            border-radius: 25px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            width: 350px;
+        }
+
+        #display {
+            background: #000;
+            color: #00ff88; /* Matrix-style green for readability */
+            text-align: right;
+            padding: 30px 20px;
+            font-size: 2.5rem;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            min-height: 100px;
+            word-wrap: break-word;
+            word-break: break-all;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,1);
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        button {
+            padding: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            background: #333;
+            color: white;
+            transition: all 0.1s ease;
+        }
+
+        button:hover {
+            background: #444;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(2px);
+            filter: brightness(1.2);
+        }
+
+        /* Specialized Buttons */
+        .btn-op { background: #3d3d3d; color: #ff9500; }
+        .btn-equal { background: #ff9500; color: white; }
+        .btn-clear { background: #ff3b30; color: white; }
+
+        .col-2 { grid-column: span 2; }
+    </style>
+</head>
+<body>
+
+<div class="calculator">
+    <div id="display">0</div>
+    <div class="buttons">
+        <button onclick="clearDisplay()" class="col-2 btn-clear">AC</button>
+        <button onclick="deleteLast()" class="btn-op">DEL</button>
+        <button onclick="appendToDisplay('/')" class="btn-op">/</button>
+
+        <button onclick="appendToDisplay('7')">7</button>
+        <button onclick="appendToDisplay('8')">8</button>
+        <button onclick="appendToDisplay('9')">9</button>
+        <button onclick="appendToDisplay('*')" class="btn-op">x</button>
+
+        <button onclick="appendToDisplay('4')">4</button>
+        <button onclick="appendToDisplay('5')">5</button>
+        <button onclick="appendToDisplay('6')">6</button>
+        <button onclick="appendToDisplay('-')" class="btn-op">-</button>
+
+        <button onclick="appendToDisplay('1')">1</button>
+        <button onclick="appendToDisplay('2')">2</button>
+        <button onclick="appendToDisplay('3')">3</button>
+        <button onclick="appendToDisplay('+')" class="btn-op">+</button>
+
+        <button onclick="appendToDisplay('0')">0</button>
+        <button onclick="appendToDisplay('.')">.</button>
+        <button onclick="calculate()" class="col-2 btn-equal">=</button>
+    </div>
+</div>
+
+<script>
+    /* --- JAVASCRIPT LOGIC --- */
+    const display = document.getElementById('display');
+
+    function appendToDisplay(input) {
+        // If display is "0" or "Error", replace it; otherwise add to it
+        if (display.innerText === '0' || display.innerText === 'Error') {
+            display.innerText = input;
+        } else {
+            display.innerText += input;
+        }
+    }
+
+    function clearDisplay() {
+        display.innerText = '0';
+    }
+
+    function deleteLast() {
+        if (display.innerText.length > 1) {
+            display.innerText = display.innerText.slice(0, -1);
+        } else {
+            display.innerText = '0';
+        }
+    }
+
+    function calculate() {
+        try {
+            // eval() processes the string as a mathematical formula
+            const result = eval(display.innerText);
+
+            // Handle division by zero or infinite results
+            if (!isFinite(result)) {
+                display.innerText = "Error";
+            } else {
+                display.innerText = result;
+            }
+        } catch (error) {
+            display.innerText = "Error";
+        }
+    }
+</script>
+
+</body>
+</html>
